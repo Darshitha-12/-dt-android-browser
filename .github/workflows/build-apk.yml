@@ -10,8 +10,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - uses: android-actions/setup-android@v3
-      - run: chmod +x gradlew
-      - run: ./gradlew assembleRelease --no-daemon
+      - name: Install Gradle
+        run: |
+          wget -q https://services.gradle.org/distributions/gradle-8.4-bin.zip
+          unzip -q gradle-8.4-bin.zip
+          echo "$PWD/gradle-8.4/bin" >> $GITHUB_PATH
+      - run: gradle assembleRelease --no-daemon
       - run: ls -la app/build/outputs/apk/release/
       - uses: actions/upload-artifact@v4
         with:
